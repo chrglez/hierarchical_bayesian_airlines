@@ -1,0 +1,135 @@
+---
+title: Hierarchical Bayesian Model
+description: ""
+authors:
+  - name: Christian González-Marterl
+    orcid: 0000-0003-1081-0843
+execute:
+  warnings: false
+  messages: false
+html-table-processing: none
+
+---
+
+To analyze score heterogeneity, we applied a Bayesian hierarchical model. Hierarchical models, also known as multilevel models, are useful when data are structured in groups or clusters. In this study, reviews are grouped by the site and airline. This hierarchical structure allows us to account for the variability at both the site and airline levels.
+
+Bayesian hierarchical models are powerful tools for analyzing data with nested or grouped structures. These models have two main levels:
+
+- **Fixed Effects**: These are the overall effects that apply to the entire population. In our study, the fixed effects include the site and airline.
+- **Random Effects**: These account for the variability within groups. In our study, the random effects capture the variability within each site and airline.
+
+In our analysis, following @bianchi2021a, we model the review scores using a Poisson distribution. 
+
+$$
+Pr(X\vert \lambda)=\frac{\exp{(-\lambda)}\lambda^x}{x!}
+$$
+
+This choice is appropriate because the scores are count data, which can naturally be modeled using a Poisson distribution. The Poisson distribution is widely used for modeling the number of events occurring within a fixed interval of time or space when these events happen with a known constant mean rate and independently of the time since the last event. This fits well with the nature of review scores, which can be considered as counts of discrete ratings.
+
+The general form of a Bayesian hierarchical model can be expressed as:
+
+**Level 1 (Individual reviews):**
+
+$$
+\text{score}_{ijk} \sim \text{Poisson}(\lambda_{ijk})
+$$  
+
+$$
+\log(\lambda_{ijk}) = \alpha + \beta_{i} + \gamma_{j} + \delta_{i \times j} + \epsilon_{ijk}
+$$
+
+Where:
+
+- $\lambda_{ijk}$ is the expected score for review $k$ on site $i$ for airline $j$.
+- $\alpha$ is the overall intercept.
+- $\beta_{i}$ is the effect of site $i$.
+- $\gamma_{j}$ is the effect of airline $j$.
+- $\delta_{i \times j}$ is the interaction effect between site $i$ and airline $j$.
+- $\epsilon_{ijk}$ is the random error term.
+
+
+
+```{r}
+library(readr)
+library(brms)
+library(tidyverse)
+library(broom)
+library(broom.mixed)
+library(broom.helpers)
+library(gt)
+library(gtsummary)
+```
+
+Load the data from the RDS file `combined_data.rds`. 
+
+```{r}
+airline_data <- read_rds("data/combined_data.rds") |> 
+  filter(date >= as.Date("2023-01-01") & date <= as.Date("2023-12-31")) |> 
+  mutate(
+    score = score*2, # Poisson distribution adjustment
+    site = as_factor(site),
+    airline = as_factor(airline)
+  )
+```
+
+Set up the model formula. We'll model the score as a Poisson-distributed outcome with both fixed and random effects for `site` and `airline`:
+
+```{r}
+formula <- score ~ site * airline + (1 | site) + (1 | airline)
+```
+
+Use the `brm` function to fit the hierarchical Bayesian model:
+
+```{r}
+model_file <- "model_outputs/fit_model_poisson.rds"
+
+if (file.exists(model_file)) {
+  # Cargar el modelo guardado
+  fit <- readRDS(model_file)
+  message("model loaded from saved.")
+} else {
+  # Ajustar el modelo
+  fit <- brm(formula, data = airline_data, family = poisson(),
+             chains = 2, iter = 1000, warmup = 500, thin = 2, cores = 4,
+             control = list(adapt_delta = 0.8))
+  # Guardar el modelo ajustado
+  saveRDS(fit, model_file)
+  message("model fitted and saved.")
+}
+```
+
+Summarize the model results
+
+```{r}
+summary(fit)
+```
+
+
+```{r}
+#| label: tbl-results
+#| tbl-alt: "Summary of Bayesian Hierarchical Model Results including Fixed and Random Effects."
+#| tbl-cap: " Summary of Bayesian Hierarchical Model Results including Fixed (population-level) and Random Effects (group-level)."
+
+fit |> tbl_regression(tidy_fun = broom.mixed::tidy,
+                      intercept=TRUE,
+                      estimate_fun = ~ style_sigfig(.x, digits = 3))
+```
+
+Plot the results
+
+```{r}
+#| label: fig-brms-plot
+#| fig-cap: " "
+
+plot(fit)
+```
+
+check if you model predicts your data accurately (using the estimates). If it does, then you can use that model to generate new data and make accurate predictions.
+
+
+```{r}
+#| label: fig-post
+#| fig-cap: "posterior predictive checks"
+
+pp_check(fit)
+```

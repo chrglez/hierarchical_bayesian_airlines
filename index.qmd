@@ -1,110 +1,217 @@
 ---
-title: La Palma Earthquakes
+title: How Does Customer Feedback Vary Across Leading Airline Review Platforms?
 author:
-  - name: Steve Purves
-    orcid: 0000-0002-0760-5497
-    corresponding: true
-    email: steve@curvenote.com
+  - name: Adeim Suvanbekova
+    orcid: 
+    corresponding: false
+    email: adeim.suvanbekova101@alu.ulpgc.es
     roles:
       - Investigation
       - Project administration
       - Software
       - Visualization
     affiliations:
-      - Curvenote
-  - name: Rowan Cockett
-    orcid: 0000-0002-7859-8394
+      - name: Universidad de Las Palmas de Gran Canaria
+        url: https://www.ulpgc.es/
+      - name: TIDES Institute
+        url: https://tides.ulpgc.es/en/
+
+  - name: Christian González-Martel
+    orcid: 0000-0003-1081-0843
     corresponding: false
     roles: []
     affiliations:
-      - Curvenote
+      - name: Universidad de Las Palmas de Gran Canaria
+        department: Department of Quantitative Methods in Economics
+        url: https://dmc.ulpgc.es/
+      
+  - name: Teresa Aguiar-Quintana
+    orcid: 0000-0002-5037-0873
+    corresponding: true
+    roles: []
+    affiliations:
+      - name: Universidad de Las Palmas de Gran Canaria
+        department: Department of Economics and Business Management
+        url: https://dede.ulpgc.es/
+      - name: TIDES Institute
+        url: https://tides.ulpgc.es/en/
 keywords:
-  - La Palma
-  - Earthquakes
+  - Bayesian Hierarchical Model
+  - Online Consumer Reviews (OCRs)
+  - Airline Service Quality
 abstract: |
-  In September 2021, a significant jump in seismic activity on the island of La Palma (Canary Islands, Spain) signaled the start of a volcanic crisis that still continues at the time of writing. Earthquake data is continually collected and published by the Instituto Geográphico Nacional (IGN). ...
+  This study investigates score heterogeneity in online consumer reviews (OCRs) for airlines across TripAdvisor and Skytrax. The research addresses the variability in review scores, focusing on two airlines: Ryanair and Lufthansa. Previous studies have largely ignored cross-platform score variability, and this study fills that gap by applying a Bayesian hierarchical model. This model is suitable for its ability to incorporate prior knowledge and handle complex data structures. The dataset spans from January 1, 2023, to December 31, 2023. Results indicate no significant differences in review scores between platforms or airlines, suggesting consistent customer satisfaction. However, a significant interaction effect between TripAdvisor and Ryanair indicates lower scores for this combination. These findings highlight the importance of platform-airline interactions in customer feedback analysis. The study’s implications underscore the need for tailored strategies in managing OCRs and validate the use of Bayesian methodologies in hospitality research. Future research should expand the dataset for broader validation.
 plain-language-summary: |
-  Earthquake data for the island of La Palma from the September 2021 eruption is found ...
+  This study looks at how customer reviews for airlines differ between TripAdvisor and Skytrax. We analyzed reviews for Ryanair and Lufthansa using a special statistical method to see if there are big differences in ratings. We found that, on average, ratings are similar across both platforms and airlines. However, Ryanair reviews on TripAdvisor tend to be lower. These findings can help airlines understand and improve their online reputation.
 key-points:
-  - A web scraping script was developed to pull data from the Instituto Geogràphico Nacional into a machine-readable form for analysis
-  - Earthquake events on La Palma are consistent with the presence of both mantle and crustal reservoirs.
+  - Utilized Bayesian hierarchical models to analyze score variability in airline reviews from TripAdvisor and Skytrax.
+  - Found no significant overall difference in ratings between Ryanair and Lufthansa or between the two review platforms.
+  - Identified a significant negative interaction effect for Ryanair reviews on TripAdvisor, highlighting platform-specific variations in customer satisfaction.
 date: last-modified
 bibliography: references.bib
 citation:
-  container-title: Earth and Space Science
+  container-title: Hospitality
 number-sections: true
-jupyter: python3
+
 ---
 
 ## Introduction
 
-```{python}
-import matplotlib.pyplot as plt
-import numpy as np
-eruptions = [1492, 1585, 1646, 1677, 1712, 1949, 1971, 2021]
-```
+As technology continues to advance industries globally and digitalization transforms operations, the hospitality sector has undergone significant changes. This evolution , driven by Web 2.0 technologies,  has given rise to online review platforms featuring user-generated content (UGC), providing valuable insights for prospective customers and fundamentally reshaping customer engagement with businesses. Thus, online consumer reviews (OCRs) have begun to significantly influence consumer decision-making processes [@mendes-filho2018a], shaping brand image [@lam2020a] , and enhancing electronic Word-of-Mouth (eWOM) [@muda2021a;@nusairat2021a]. Furthermore, within the academic field, scholars are increasingly recognizing the advantages of applying UGC due to its accessibility and capacity for in-depth analysis. Consequently, there has been a notable growth in scholarly research incorporating UGC.
 
-```{python}
-#| label: fig-timeline
-#| fig-cap: Timeline of recent earthquakes on La Palma
-#| fig-alt: An event plot of the years of the last 8 eruptions on La Palma.
+Given the unique characteristics of airline services, both in-flight and on-ground, effective customer communication and feedback are indicators of the operational efficiency and overall customer experience. Existing literature on airline services heavily relies on surveys as the primary data source to explore perceptions of service quality and customer satisfaction. The recent increasing integration of online reviews into scholarly research is attributed to accessibility, diverse perspectives, and rich data content, thereby overcoming the sampling limitations associated with traditional surveys. The incorporation of UGC within the airline industry has been widely utilized for various research aims, such as assessing passengers' emotions following flight delays [@song2020a], investigating the impact of airline alliance strategy on service quality [@migdadi2022a], and predicting airline recommendations. [@jain2022a;@siering2018a]. However, despite the growing literature utilizing custom-shared experiences, there remains a gap in understanding the variability in online customer ratings within the airline industry. To address this gap, this study proposes a Bayesian approach for measuring and managing score heterogeneity across major online review platforms.
 
-plt.figure(figsize=(6, 1))
-plt.eventplot(eruptions, lineoffsets=0, linelengths=0.1, color='black')
-plt.gca().axes.get_yaxis().set_visible(False)
-plt.ylabel('')
-plt.show()
-```
+**(Methodogy/Need to check)** Recently, [@martel2023a] noted a lack of research on the application of Bayesian techniques in publications within the tourism and hospitality sectors, particularly in studies focused on eWOM. While Bayesian approaches have found extensive adoption across various fields such as finance, healthcare, and marketing over the past decades, their application in hospitality research remains limited. Despite numerous advantages, including the incorporation of prior data, flexibility, and the ability to handle small sample sizes, the integration of Bayesian methods in hospitality studies remains constrained. According to @bianchi2021a Bayesian statistics provide a more nuanced analysis compared to classical methods, which is particularly beneficial for the hospitality sector. Through the analysis of data obtained from primary OCR platforms for airlines, namely TripAdvisor and Skytrax, the study presents a novel Bayesian approach to understanding score heterogeneity among the principal review portals for airlines.
 
-```{python}
-#| output: false
+The airline industry has experienced notable transformations following the introduction of Low-Cost Carriers (LCCs), which have impacted passengers' perceptions and shaped distinct expectations according to airline's business model. The evaluation of services provided by LCCs differ compared to Full-Service Carriers (FSCs) due to disparities in airfare pricing  and customer anticipations. This distinction is underscored by the customer satisfaction coefficient, revealing the heightened importance of different attributes [@byun2016a]. Thus, to conduct a comprehensive analysis, both LCCs and FSCs will be examined.
 
-avg_years_between_eruptions = np.mean(np.diff(eruptions[:-1]))
-avg_years_between_eruptions
-```
+Given research presents the methodology and findings of Bayesian analysis, based on data collected from leading online review platforms for both LCCs and FSCs. Through in-depth approach, the study not only contributes to the existing literature on UGC and airline service quality but also brings attention to rating heterogeneity, offering a comprehensive understanding of score variations. These insights are valuable for theoretical scholars utilizing UGC for their analysis, as the majority of studies tend to concentrate on a single UGC platform, while also holding practical implications for stakeholders seeking to enhance service quality, foster eWOM, and manage brand image effectively within the highly competitive industry.
 
-Based on data up to and including 1971, eruptions on La Palma happen every 79.8 years on average.
+## Literature Review {#sec-lit-review}
 
-Studies of the magma systems feeding the volcano, such as @marrero2019, have proposed that there are two main magma reservoirs feeding the Cumbre Vieja volcano; one in the mantle (30-40km depth) which charges and in turn feeds a shallower crustal reservoir (10-20km depth).
+### The importance of online consumer reviews in tourism.
 
-Eight eruptions have been recorded since the late 1400s (@fig-timeline).
+Online reviews have captured considerable attention of both academia and industry due to their significant impact on consumer behavior and purchasing decisions. Thus, UGC has become increasingly essential in the tourism sector, particularly considering the intangible nature of hospitality and the growing reliance on reviews for travel planning. Notably, such content is considered more credible than official sites and tourist destination pages [@bilos2022a], influences travelers’ behavior more than marketing-generated-content [@tsiakali2018a], and positively influences tourists' intentions to book a hotel and visit a destination [@ukpabi2018a]. Research by @cox2009a in the accommodation sector reveals that the majority of consumers prioritize the views of other travelers over the hotel's self-description available online. Furthermore, UGC has more credibility and trustworthiness compared to professionally generated content, and this trustworthiness remains consistent regardless of whether participants encounter positive or negative information [@cheong2008a].
 
-Data and methods are discussed in @sec-data-methods.
+According to @muritala2020a, the research on online reviews and electronic eWOM in tourism and hospitality is reaching a mature stage, characterized by a rapidly growing volume of studies built on a solid base of seminal research and the application of the latest analytical techniques, including artificial neural networks and deep learning. Academics have extensively studied UGC in relation to travel planning behaviour [@bilos2022a; @cox2009a; @mendes-filho2018a; @tsiakali2018a], corporate reputation management [@baka2016a; @nicoli2017a], motivations for content contribution [@bronner2011a; @daugherty2008a; @kaur2021a; @yoo2009a], credibility perception [@cheong2008a; @filieri2021a; @lo2019a],  helpfulness determinants [@filieri2021a; @hu2020a; @huang2015a; @kwon2021a; @lo2019a], predicting recommendations [@jain2022a; @siering2018a], and service recovery [@etemad-sajadi2019a; @xu2019a].
 
-Let $x$ denote the number of eruptions in a year. Then, $x$ can be modeled by a Poisson distribution
+The increasing adoption of OCRs in scholarly research is attributed to numerous advantages. Firstly, it provides direct access to extensive datasets with organically generated and diverse data. In certain instances, OCRs enable researchers to gather socio-demographic details of content contributors, supporting cross-cultural studies and analyses of age or gender disparities [@dike2024a; @punel2019a; @stamolampros2019a; @sudhakar2020a]. **(DO I NEED TO PUT ARTICLES?)**.  Additionally, given the unique nature of airline services, reviews often contain valuable information on cabin class, airline type, and routes for evaluating moderating effect and comparative analysis, along with additional ratings on certain service attributes for extended examination [@lucini2020a; @sezgen2019a; @tahanisaz2020a]. Furthermore, reviews allow researchers to track changes in customer perceptions, preferences, and behaviors in response to significant external factors such as the COVID-19 pandemic [@hassan2022a; @nilashi2022a; @sulu2022a] and economic crises. However, study by @lu2015a underscores that the anonymity of UGC creators, sample representativeness and the generalizability of results poses challenges to research validity, thereby questioning the reliability of findings.
 
-$$
-p(x) = \frac{e^{-\lambda} \lambda^{x}}{x !}
-$$ {#eq-poisson}
+Acknowledging the importance of online reviews, scholars have begun investigating their credibility and willingness to use. Research conducted by @lo2019a revealed higher perceived credibility scores among reviews that are negative , written by experts and with a consistent rating. Consumers seek the opinions of others to minimize risks and gather prepurchase information, making these opinions more valuable than advertising. According to @bilos2022a  respondents rely on UGC more than their friends' recommendations and promotional content. For analyzing the intention to use online consumer reviews, scholars rely on the Technology Acceptance Model (TAM) [@davis1989a] as a predominant framework in hospitality literature, which identifies perceived usefulness and ease of use as key factors. In addition, @changchit2020a identified perceived credibility and importance of online reviews, along with computer self-efficacy, as additional factors influencing users' intentions. According to @mendes-filho2018a, there is a heightened intention to use UGC in travel planning if the content provides perceived empowerment and usefulness. The study by @assaker2020a found that gender and age significantly moderate travellers’ intention to use UGC, with perceived usefulness being more influential for male travellers and perceived ease of use being more impactful for female and older travellers.
 
-where $\lambda$ is the rate of eruptions per year. Using @eq-poisson, the probability of an eruption in the next $t$ years can be calculated.
+Online travel review authors are primarily motivated by a desire to help service providers, concern for other consumers, and the need for enjoyment and positive self-enhancement [@yoo2009a]. @kaur2021a analysing motivations behind review submission, defined altruism, reciprocity, egocentric behavior, knowledge self-efficacy, and collectivism as a key antecedents. Identifying profile of vacationers contributing to review sites, @bronner2011a reveal them to typically be under 55 years, from high and lower-middle-income groups, and often couples with or without children. The authors highlighted the importance of distinguishing between self-directed and other-directed motivations, which influence the type of review site and the manner of expression. Self-directed motivations favor marketer-generated sites, commenting on fewer aspects, predominantly negative reviews, and contributing to less accessible platforms. Vacationers with other-directed motivations prefer consumer-generated sites, engaging in broader commenting, posting mainly positive reviews, using both text and ratings, and contributing to sites accessible to other vacationers. According to @wilson2012a, national attitudes and motivations significantly influence the type of UGC posted. In their study, authors found that British and Swiss users tend to share photos and videos on social media to relive vacation experiences, while Spanish users prefer using text and comments to make recommendations to other travelers.
 
-| Name                | Year |
-|---------------------|------|
-| Current             | 2021 |
-| Teneguía            | 1971 |
-| Nambroque           | 1949 |
-| El Charco           | 1712 |
-| Volcán San Antonio  | 1677 |
-| Volcán San Martin   | 1646 |
-| Tajuya near El Paso | 1585 |
-| Montaña Quemada     | 1492 |
+With the widespread availability of online reviews and the consequent information overload, scholars have begun to study reviews in relation to their perceived helpfulness. However, despite extensive research into the determinants of review helpfulness within tourism and hospitality, findings remain mixed. A recent study by @hu2020a identified review length as the most influential factor, followed by reviewer expertise and age, while the impact of review valence and readability was found to be insignificant. Conversely, @filieri2018a contended that long reviews are not necessarily perceived as helpful. Instead, consumers favor fact-based, objective, and logically structured reviews especially in the context of  high involvement purchase decisions. According to @kwok2016a, the helpfulness of online hotel reviews is negatively affected by review length and rating, whereas positively impacted by manager response and reviewer experience. @huang2015a determined the relationship between word count and helpfulness remained significant for reviews containing 144 words or fewer. However, once the word count exceeded, the relationship loose statistical significance. Analysing extremely negative ratings, @filieri2019a, found that these ratings are often considered helpful and diagnostic, as they provide valuable insights to justify the extreme evaluation, thereby significantly contributing to consumer decision-making.
 
-: Recent historic eruptions on La Palma {#tbl-history}
+### The research on OCR applied to airlines industry
 
-@tbl-history summarises the eruptions recorded since the colonization of the islands by Europeans in the late 1400s.
+Despite the growing adoption of reviews in scholarly research, studies specifically addressing online reviews related to airlines remain limited. Analyzing service quality within tourism and hospitality industry using UGC, @lu2015a discovered that the majority of studies focused on the lodging setting, with relatively fewer investigations conducted in the airline, online travel agent, and restaurant settings. Similarly, an analysis of online customer evaluations in tourism and hospitality by @schuckert2015a revealed that over half of the reviewed articles concentrated on hotels. Existing research of airline service through online customer-shared experiences are primarily focused on perceptions of service quality [@brochado2023a; @korfiatis2019a; @rasool2021a], customer satisfaction [@ban2019a; @chatterjee2023a; @dike2024a; @lucini2020a], and behavioural intentions [@siering2018a; @wang2023a].
 
-![Map of La Palma](images/la-palma-map.png){#fig-map}
+Consumer feedback platforms have undergone a significant expansion, gaining increasing popularity with the advent of Web 2.0. Online reviews assessing airline services within the scholarly literature primarily rely on data sourced from Skytrax and TripAdvisor platforms,  with some studies also incorporating UGC sourced from social media, particularly Twitter. (DO I NEED TO ADD TWITTER ARTICLES). A study by @lu2023a underscores the importance of incorporating content from multiple review channels to gain a more accurate understanding of service quality, recognizing the potential disparities across platforms. The study on US airlines revealed that Skytrax reviewers prioritize boarding and baggage experiences, whereas Twitter users emphasize customer service interactions. @bilos2022a providing a comparative analysis with Airbnb, found that TripAdvisor reviews are perceived as more valuable for making purchasing decisions. Through conducting a comparative analysis between results sourced from Twitter and the Department of Transportation's official service quality report for US airlines, (Tian et al., 2020) **SEARCH REFERENCE** established the reliability of service quality metrics derived from social media.
 
-La Palma is one of the west most islands in the Volcanic Archipelago of the Canary Islands (@fig-map).
+Cross-cultural investigations in the field have uncovered differences in the evaluation of provided services, influenced by the cultural backgrounds of reviewers. @punel2019a revealed the influence of  passengers’ country of residence to travel experience, perception, and the evaluation of airline services. Notably, North American passengers prioritize cost over in-flight services and complain more about their national airlines, while East and Southeast Asian passengers are satisfied with Asian airlines and value in-flight services. Middle Easterners are critical of non-local airlines, while Oceania travelers expect high service standards and South Americans have lower expectations for in-flight amenities with an emphasis on price. According to Dike and Davis (2023) **SEARCH REFERENCE** passengers from individualistic cultural backgrounds tend to perceive service quality as lower compared to customers from collectivist cultural backgrounds. @stamolampros2019a found that airline passengers' satisfaction with service quality varies depending on their cultural values, impacting both overall satisfaction and specific aspects such as staff interactions, food quality, seat comfort, and cleanliness. Additionally, the study discovered that cultural characteristics significantly shape both numerical ratings and textual content in reviews.
 
-{{< embed notebooks/data-screening.qmd#fig-spatial-plot >}}
+The existing literature examining the airline industry underscores distinct disparities between Low-Cost Carriers (LCCs) and Full-Service Carriers (FSCs), emphasizing the significant impact of airline category on passenger expectations and perceptions of service quality. Consequently, each type of carrier should strategically prioritize specific features to enhance overall service delivery. According to @lim2020a, FSCs should focus on enhancing tangible features, while LCCs should concentrate on reliability. Furthermore, variations in recommendation drivers exist across different airline business models. (Siering et al., 2018) revealed that LCCs should focus on improving augmented service aspects like amenities to enhance recommendations, while FSNCs should prioritize core service aspects such as in-flight amenities and customer service quality.
 
-@fig-spatial-plot shows the location of recent Earthquakes on La Palma.
+#### OCR studies based on data collected in Tripadvisor.
+
+Tripadvisor, the world's largest travel guidance platform, features over 1 billion reviews and is accessible in 43 markets and 22 languages (Tripadvisor, 2024) **SEARCH REFERENCE**.  In addition to its general community guidelines, the platform has established specific posting guidelines for reviews, which are displayed on an organization’s listing page and are associated with a bubble rating ranging from 1 to 5. Beyond overall ratings, contributors evaluate  additional service attributes, including legroom, seat comfort, in-flight entertainment, onboard experience, customer service, value for money, cleanliness, check-in and boarding processes, as well as food and beverage quality. 
+
+The platform has been extensively utilized as a data source by various investigators worldwide, contributing to diverse research findings. In particular, online reviews serve as an efficient tool for examining customer satisfaction. @sudhakar2020a analyzed Indian airlines using TripAdvisor feedbacks to reveal varying factors influencing satisfaction across nationalities and airline types, with Indian passengers prioritizing value for money and foreign passengers prioritizing service attributes. @sezgen2019a examined 45 international airlines to define the key drivers of passenger satisfaction and dissatisfaction across full-service and low-cost carriers, as well as economy and premium cabins. Despite variations in satisfaction drivers, fundamental factors such as friendly staff, value, and service quality remain universally important. In the US airline market, @park2020a underscores the need for sustainable strategies beyond price competition, highlighting the asymmetric impact of service quality attributes on customer satisfaction and their critical importance in airline operations. According to @korfiatis2019a, integrating unstructured data from online reviews into service quality assessment enhances understanding and predictability of customer satisfaction. Examining Tripadvisor reviews, the study revealed temporal variations in dimensions, thereby emphasizing the importance of monitoring and adapting to changing customer preferences over time. 
+
+Additionally, Tripadvisor reviews have been used to identify key themes by @brochado2019a and @sulu2022a during the pandemic. The study by @brochado2019a was aimed to identify the main themes in traveler reviews and their relationship with value-for-money ratings by examining airlines affiliated with the largest alliances, SkyTeam and Star Alliance, across France, the United States, Indonesia, Canada, Taiwan, and Germany. Whereas,  Sulu’s [-@sulu2022a] research focused on online airline reviews during the COVID-19 outbreak, aiming to define principal themes and identify disparities among passengers of various nationalities. The analysis revealed that European passengers exhibited the most polarized opinions, ranging from highly critical to highly satisfied, while American and Australian passengers predominantly expressed positive reviews.
+
+#### OCR studies based on data collected in Skytrax.
+
+Skytrax is the international air transport rating organisation with Air Travel review forum (www.airlinequality.com) that has become a leading review site for airline, airport and associated air travel traveller reviews **SEARCH REFERENCE** (Skytrax, 2024). Reviews submitted to the platform undergo a multi-stage checking process to ensure compliance with the Editorial Policy   and requires reviewers to submit feedback that follows a structured evaluation framework. The platform enables passengers to share detailed opinions on their experiences across four categories: airline, seat, airport, and lounge. Passengers can rate airlines on a scale from 1 to 10 and provide textual comment, along with additional details such as country of residence, date of flight, route, cabin class, aircraft type, type of travel, and likelihood of recommending the airline. Moreover, contributors assess supplementary service attributes including value for money, ground service, seat comfort, cabin staff service, food & beverages, in-flight entertainment, and cabin Wi-Fi & connectivity.
+
+Various scholars have used Skytrax reviews to define key factors influencing customer experience and satisfaction within the airline sector. @ban2019a identified six key clusters, including seat comfort, staff service, entertainment, ground service, value for money, and airline brand, with all factors except entertainment significantly impacting customer satisfaction and recommendation. Shadiyar et al. (2020) **SEARCH REFERENCE** explored the utilization of big data analytics and online customer reviews to enhance customer satisfaction in airlines, identifying factors such as seat comfort, staff behavior, food and beverage quality, ground service, and particularly value for money as main. The study by @lucini2020a was aimed to measure customer satisfaction by analyzing Skytrax reviews to provide airlines with guidelines to improve competitiveness. The study revealed that the type of cabin significantly impacts customer satisfaction dimensions, prioritizing customer service for first-class passengers, comfort for premium economy passengers, and efficient baggage handling and minimal waiting times for economy class travellers, whereas the type of passenger had minimal impact on satisfaction dimensions. @dike2024a analyzed Skytrax feedbacks to explore how customer culture, travel purpose, and seat type shape customer expectations and satisfaction. The study highlighted that customer service quality, delays, and baggage handling significantly impact perceived service performance, with empathy and reliability having the strongest influence on perceived satisfaction, while cultural backgrounds affect levels of customer satisfaction. @chatterjee2023a conducted a ten-year analysis of Skytrax reviews, identifying core attributes such as value for money, seating comfort, and cabin staff behaviour as more strongly related to customer satisfaction and recommendation than augmented aspects like food and beverages and in-flight entertainment. Authors found that core service attributes such as responsiveness and reliability are crucial in shaping customer satisfaction, whereas tangibles and empathy significantly influence customers' likelihood of recommending an airline.
+
+Also, Skytrax forum have been extensively used to analyze service quality perceptions worldwide. Brochado's [-@brochado2023a] analysis of four leading Chinese airlines highlighted value for money as consistently the most influential service attribute, with varying responses from different traveler types to service attributes. @kwon2021a used the platform to  understand customer needs and preferences in the Asian airline market. @lim2020a used Skytrax feedbacks to compare service quality perceptions between full-service carriers  and low-cost carriers , finding tangibles as the most significant dimension for FSCs and reliability for LCCs. In terms of varied expectations of service quality, @punel2019a revealed that different regions exhibit distinct priorities and expectations concerning in-flight services and overall satisfaction. Passengers in first or business class prioritize seat comfort, food, and beverages, as well as in-flight entertainment. In contrast, passengers in economy class place a higher emphasis on value for money.
+
+**The rest of this paper is organised as follows**
 
 ## Data & Methods {#sec-data-methods}
 
+### Bayesian Approach
+
+This study adopts a Bayesian approach to analyze the score heterogeneity of online consumer reviews (OCRs) across major airline review platforms, specifically TripAdvisor and Skytrax. 
+
+Bayesian methods have been increasingly recognized in various fields for their robustness in handling complex data structures and integrating prior knowledge. The researcher starts with an initial belief about a parameter ($\theta$) and its associated probability distribution ($\pi(\theta)$), named *prior probability distribution*. Then data are collected $(x_1,\cdots,x_n)$. These data follow a distribution $f(x\vert \theta)$ that depends on the parameter $\theta$, known as *likelihood function*. The researcher's belief of $\theta$ are updated applying Bayes' theorem, combinig both into a *posterior probability function*
+
+$$
+\pi(\theta\vert x)=\frac{f(x\vert \theta)\pi(\theta)}{f(x)}\propto f(x\vert \theta)\pi(\theta)
+$$
+
+In the context of online consumer reviews (OCRs), Bayesian approaches are particularly advantageous because they allow us to account for the variability in review scores across different platforms and airlines. @bianchi2021a highlight the advantages of Bayesian statistics in hospitality research, particularly for analyzing subjective guest reviews. @martel2023a highlighted the importance of managing score heterogeneity between online consumer review websites, offering an alternative to frequentist methods. @gomez2024a use a robust Bayesian methodology to manage uncertainty with prior distributions, effectively transforming measures of interest into actionable decision-making intervals.
+
+### Data description
+
+The data for this study was collected from two primary OCR platforms: TripAdvisor and Skytrax. These platforms were chosen due to their popularity and extensive use in academic research on airline services. **[Citation needed]** The dataset comprises reviews from two distinct airlines: Ryanair, representing the Low-Cost Carriers (LCCs), and Lufthansa, representing the Full-Service Carriers (FSCs). This differentiation allows for a comparative analysis of customer perceptions and expectations across different business models within the airline industry. The reviews span the period from January 1, 2023, to December 31, 2023, covering a full year of reviews.
+
+{{< embed notebooks/exploratory-analysis.qmd#tbl-descriptive >}}
+
+@tbl-descriptive presents various descriptive statistics about the distributions of ratings for Skytrax and TripAdvisor for the two airlines studied. These descriptive statistics provide a detailed overview of the data, highlighting central tendencies, variability, and other relevant aspects of the rating distributions.
+
+These descriptive statistics indicate the mean scores, standard deviations, and the number of reviews for each airline on both platforms, providing a clear picture of the data distribution and the volume of customer feedback available for analysis.
+
+{{< embed notebooks/exploratory-analysis.qmd#fig-histogram >}}
+
+Our analysis employs a standard 1–5 scale, with the Skytrax sample data linearly transformed to match this conventional scale.
+
+The histograms in @fig-histogram illustrate the frequency of different review scores, showing a clear left skew (negative skewness) in the distribution of scores for both airlines on both platforms. This left skewness indicates that a majority of the reviews are clustered towards the lower end of the rating scale. Specifically, a significant number of reviews have scores of 1 or 2, while higher scores are less frequent. This pattern suggests a tendency for customers to leave lower ratings, which could be indicative of more frequent negative experiences or higher expectations not being met.
+
+### Bayesian Hierarchical Model
+
+To analyze score heterogeneity, we applied a Bayesian hierarchical model. Hierarchical models, also known as multilevel models, are useful when data are structured in groups or clusters. In this study, reviews are grouped by the site and airline. This hierarchical structure allows us to account for the variability at both the site and airline levels.
+
+Bayesian hierarchical models are powerful tools for analyzing data with nested or grouped structures. These models have two main levels:
+
+- **Fixed Effects**: These are the overall effects that apply to the entire population. In our study, the fixed effects include the site and airline.
+- **Random Effects**: These account for the variability within groups. In our study, the random effects capture the variability within each site and airline.
+
+In our analysis, following @bianchi2021a, we model the review scores using a Poisson distribution. 
+
+$$
+Pr(X\vert \lambda)=\frac{\exp{(-\lambda)}\lambda^x}{x!}
+$$
+
+This choice is appropriate because the scores are count data, which can naturally be modeled using a Poisson distribution. The Poisson distribution is widely used for modeling the number of events occurring within a fixed interval of time or space when these events happen with a known constant mean rate and independently of the time since the last event. This fits well with the nature of review scores, which can be considered as counts of discrete ratings.
+
+The general form of a Bayesian hierarchical model can be expressed as:
+
+$$
+\text{score}_{ijk} \sim \text{Poisson}(\lambda_{ijk})
+$$  
+
+$$
+\log(\lambda_{ijk}) = \alpha + \beta_{i} + \gamma_{j} + \delta_{i \times j} + \epsilon_{ijk}
+$$
+
+Where:
+
+- $\lambda_{ijk}$ is the expected score for review $k$ on site $i$ for airline $j$.
+- $\alpha$ is the overall intercept.
+- $\beta_{i}$ is the effect of site $i$.
+- $\gamma_{j}$ is the effect of airline $j$.
+- $\delta_{i \times j}$ is the interaction effect between site $i$ and airline $j$.
+- $\epsilon_{ijk}$ is the random error term.
+
+
+The results of the Bayesian hierarchical model applied to analyze the heterogeneity of review scores are presented in @tbl-results
+
+{{< embed notebooks/hierarchical-bayesian-model.qmd#tbl-results >}}
+
+The overall intercept of 1.05 indicates the baseline level of review scores when other factors are held constant. However, the wide 95% confidence interval ranging from -3.67 to 6.17 suggests high uncertainty around this estimate, indicating that the baseline level can vary significantly. 
+
+The effect of the site being TripAdvisor compared to Skytrax is estimated at -0.03. This small effect size, coupled with a 95% confidence interval between -4.65 and 4.39, indicates that there is no significant difference in review scores between TripAdvisor and Skytrax. The wide confidence interval reflects substantial uncertainty and variability in this comparison. 
+
+The effect of Ryanair compared to Lufthansa is estimated at 0.14. Similar to the site effect, the 95% confidence interval of -5.67 to 5.87 shows a wide range, indicating that there is no significant difference in review scores between these two airlines. This suggests that the review scores for Ryanair and Lufthansa are statistically similar.
+
+The interaction between the site TripAdvisor and the airline Ryanair is estimated at -0.18, with a 95% confidence interval from -0.30 to -0.05. This negative interaction effect indicates that the combination of TripAdvisor and Ryanair tends to have lower review scores compared to other combinations. The narrow confidence interval suggests that this interaction effect is statistically significant, implying a specific negative effect when these two factors are combined.
+
+The standard deviation of the intercept for the airlines is 1.71, with a 95% confidence interval between 0.10 and 4.84. This indicates a considerable amount of variability in the baseline review scores across different airlines. The wide confidence interval suggests that while there is some variability, the exact amount is uncertain.
+
+The standard deviation of the intercept for the sites is 1.68, with a 95% confidence interval between 0.07 and 5.02. Similar to the airline intercept variability, this shows significant variability in the baseline review scores across different sites. The wide confidence interval reflects uncertainty in the extent of this variability.
+
+
+
+
 ## Conclusion
+
+This study explored the score heterogeneity of online consumer reviews (OCRs) across two major airline review platforms—TripAdvisor and Skytrax—using a Bayesian hierarchical model. Our findings provide valuable insights into how review scores vary across different platforms and airlines, contributing to the broader understanding of customer feedback in the airline industry.
+
+The analysis revealed no significant differences in review scores between TripAdvisor and Skytrax or between Ryanair and Lufthansa. This suggests that, on average, customer satisfaction as reflected in the review scores is consistent across these platforms and airlines. However, the interaction effect between TripAdvisor and Ryanair indicates that specific platform-airline combinations can influence customer perceptions, highlighting the nuanced nature of OCRs.
+
+The significant variability in baseline scores across platforms and airlines underscores the importance of considering both fixed and random effects in understanding score heterogeneity. This finding aligns with previous research [@martel2023a; @bianchi2021a], emphasizing the need for robust statistical methods to manage the diverse sources of OCR data.
+
+Despite the strengths of our study, including the application of advanced Bayesian hierarchical models, there are limitations that need to be addressed. The analysis was constrained by the specific dataset, which covered only one year of reviews for two airlines. Future research should consider a broader dataset, including more airlines and a longer timeframe, to validate and extend our findings.
+
+Furthermore, the Bayesian hierarchical approach provides a framework for incorporating prior knowledge and handling complex data structures, making it a powerful tool for analyzing OCRs. However, further work is needed to refine these models and explore their application in other contexts within the tourism and hospitality sectors [@gomez2024a].
+
+In summary, our study contributes to the understanding of score heterogeneity in OCRs and offers practical implications for airline industry stakeholders. By highlighting the importance of platform-airline interactions and the variability in customer feedback, we provide insights that can help improve service quality and manage brand reputation effectively. Future research should continue to explore these dynamics, leveraging the strengths of Bayesian methodologies to enhance our understanding of customer satisfaction in the digital age.
+
+The findings of this study underscore the necessity for tailored strategies in managing OCRs and provide a foundation for future research in this area. By continuing to investigate the complex interactions between review platforms, airlines, and customer perceptions, we can develop more effective approaches to improving customer satisfaction and fostering positive electronic word-of-mouth (eWOM) in the highly competitive airline industry.
 
 ## References {.unnumbered}
 

@@ -1,0 +1,131 @@
+---
+title: Exploratory Analysis
+description: This document provides an exploratory analysis of airline review data from Skytrax and Tripadvisor for the year 2023. It includes data filtering, summary statistics, and visualizations to understand the distribution of review scores for Lufthansa and Ryanair.
+authors:
+  - name: Christian González-Marterl
+    orcid: 0000-0003-1081-0843
+execute:
+  warnings: false
+  messages: false
+html-table-processing: none
+
+---
+
+```{r}
+library(readr)
+library(dplyr)
+library(forcats)
+
+library(gt)
+
+library(ggplot2)
+library(ggtext)
+```
+
+Load the data from the RDS file `combined_data.rds`. 
+
+```{r}
+airline_data <- read_rds("data/combined_data.rds") |> 
+  filter(date >= as.Date("2023-01-01") & date <= as.Date("2023-12-31")) |> 
+  mutate(
+    score = score*2,
+    site = as_factor(site),
+    airline = as_factor(airline)
+  )
+```
+
+Then we will filter by date. From `r format(min(airline_data$date), "%B %Y")` to `r format(max(airline_data$date), "%B %Y")`, one activity's year.
+
+
+Display the first few rows of the filtered data to check the filtering
+
+```{r}
+head(airline_data)
+```
+
+# Descriptive analysis 
+
+Generate a summary table showing the mean, standard deviation, and number of reviews for each combination of site and airline.
+
+
+
+```{r}
+#| label: tbl-descriptive
+#| tbl-alt: "Descriptive Statistics of Review Scores by Site (Tripadvisor, Skytrax) and Airline (LCC:Ryanair, FCC:Lufthansa)"
+#| tbl-cap: "Descriptive Statistics of Airline Review Scores by Site for the period from 2023-01-01 to 2023-12-31"
+
+
+descriptive_table <- airline_data |>
+  group_by(site, airline) |>
+  summarize(
+    mean_score = mean(score, na.rm = TRUE),
+    sd_score = sd(score, na.rm = TRUE),
+    n_reviews = n(),
+    .groups = 'drop'
+  )
+
+descriptive_table |>
+  gt() |>
+  tab_header(
+    title = "Descriptive Statistics of Airline Review Scores by Site",
+    subtitle = "For the period from 2023-01-01 to 2023-12-31"
+  ) |>
+  cols_label(
+    site = "Site",
+    airline = "Airline",
+    mean_score = "Mean",
+    sd_score = "SD",
+    n_reviews = "N"
+  ) |>
+  tab_spanner(
+    label = "Score",
+    columns = c(mean_score, sd_score)
+  ) |>
+  cols_align(
+    align = "left",
+    columns = vars(airline)
+  ) |>
+  tab_style(
+    style = list(
+      cell_text(indent = px(20))
+    ),
+    locations = cells_body(
+      columns = vars(airline)
+    )
+  ) |>
+  tab_style(
+    style = cell_borders(
+      sides = "bottom",
+      color = "black",
+      weight = px(2)
+    ),
+    locations = cells_column_labels(
+      columns = everything()
+    )
+  )
+
+```
+
+Now, we create histograms of review scores by site
+
+```{r}
+#| label: fig-histogram
+#| fig-cap: "Number of reviews by rating according to website ('Skytrax' and 'Tripadvisor') and airlines (Ryanair and Lufthansa) "
+
+
+gg  <- ggplot(airline_data, aes(x = score, fill = site)) +
+  geom_histogram(binwidth = 0.5, alpha = 0.7, position = "identity") +
+  facet_wrap(~ site + airline, ncol = 2, scales = "free_y") +
+  labs(title = "Number of reviews by rating according to website (<span style='color:#E41A1C;'>SKYTRAX</span> and<br>
+    <span style='color:#377EB8;'>TRIPADVISOR</span>) and airline (RYANAIR and LUFTHANSA),",
+       x = "Rating",
+       y = "Number of reviews") +
+  scale_fill_brewer(palette="Set1") +
+  theme_minimal() +
+  theme(
+    plot.title = element_markdown(lineheight = 1.1),
+    legend.position = "none"
+  )
+
+  gg
+```
